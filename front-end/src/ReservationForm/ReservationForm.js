@@ -25,10 +25,12 @@ const initialFormData = {
 const [formData, setFormData] = useState(initialFormData)
 
 const handleChange = ({ target }) => {
+    
     setFormData({
         ...formData,
         [target.name]: target.value
     })
+    
 }
 
  async function submitHandler(event) {
@@ -44,7 +46,7 @@ const handleChange = ({ target }) => {
 
 
 return ( 
-<form onSubmit={submitHandler}>
+<form onSubmit={(event) => submitHandler(event)}>
 
     <label for="first_name">First Name:</label>
     <input name="first_name" value={formData.first_name} onChange={handleChange} required />
