@@ -2,12 +2,16 @@ const service = require("./reservations.service")
 const moment = require("moment")
 
 
+
 /**
  * List handler for reservation resources
  */
+
 async function list(req, res) {
+  const date = req.query.date
   
-  const data = await service.list()
+  
+  const data = await service.list(date)
   res.json({data});
 }
 
@@ -65,10 +69,29 @@ function validateDate(req, res, next) {
 
 }
 
-async function create(req, res) {
+function validateTime(req,res, next) {
+  const { data = {}} = req.body
+
+  if (moment(data["reservation_time"], 'HH:mm', true).isValid()) {return next()} else { return next({status: 400, message: "reservation_time must be a valid time"})}
+
+}
+
+function validatePeople(req, res, next) {
+  const { data = {}} = req.body
+
+  if(isNaN(data["people"])) {return next({status: 400, message: "people must be a valid number"})}
  
 
-  const data = await service.post(req.body.data)
+  next()
+}
+
+async function create(req, res) {
+ const reservation = {
+  ...req.body.data,
+  "people": parseInt(req.body.data["people"])
+ }
+
+  const data = await service.post(reservation)
   res.status(201).json({ data })
 }
 
@@ -88,5 +111,7 @@ module.exports = {
             hasValidBody("people"),
             empty("people"),
             validateDate,
+            validateTime,
+            validatePeople,
            create]
 };

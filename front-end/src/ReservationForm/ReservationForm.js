@@ -30,7 +30,7 @@ const handleChange = ({ target }) => {
         ...formData,
         [target.name]: target.value
     })
-    
+    console.log(target.value)
 }
 
  async function submitHandler(event) {
