@@ -6,13 +6,25 @@ const moment = require("moment")
 /**
  * List handler for reservation resources
  */
+ function asDateString(date) {
+  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
+    .toString(10)
+    .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
+}
 
 async function list(req, res) {
-  const date = req.query.date
   
+  const date = req.query.date;
+  const today = asDateString(new Date());
+  console.log(date)
   
+  if (date){
   const data = await service.list(date)
+  res.json({data});} else {
+    const data = await service.list(today)
   res.json({data});
+  }
+  
 }
 
 //adding properties validater

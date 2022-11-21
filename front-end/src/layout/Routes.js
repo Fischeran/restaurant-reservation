@@ -1,5 +1,5 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useState } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
@@ -14,6 +14,7 @@ import ReservationForm from "../ReservationForm/ReservationForm";
  * @returns {JSX.Element}
  */
 function Routes() {
+
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -26,7 +27,7 @@ function Routes() {
         <ReservationForm />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        <Dashboard />
       </Route>
       <Route>
         <NotFound />

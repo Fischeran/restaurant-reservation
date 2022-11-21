@@ -64,6 +64,9 @@ export async function listReservations(params, signal) {
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
+
+  //not sure what the above code does
+  
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
@@ -75,8 +78,8 @@ export async function listReservations(params, signal) {
 
 export async function addReservation(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
-  const data = { data: params}
+  
 
-  return await fetchJson(url, {signal, method: 'POST', body:  JSON.stringify(data)}, []);
+  return await fetchJson(url, {signal, method: 'POST', body:  JSON.stringify(params)}, []);
 
 }
