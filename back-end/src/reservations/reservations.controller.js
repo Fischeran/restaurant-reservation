@@ -92,20 +92,18 @@ function validateTime(req,res, next) {
 
 function validatePeople(req, res, next) {
   const { data = {}} = req.body
+  const check = typeof data["people"];
 
-  if(isNaN(data["people"])) {return next({status: 400, message: "people must be a valid number"})}
+  if(check !== "number") {return next({status: 400, message: "people must be a valid number"})}
  
 
   next()
 }
 
 async function create(req, res) {
- const reservation = {
-  ...req.body.data,
-  "people": parseInt(req.body.data["people"])
- }
+ 
 
-  const data = await service.post(reservation)
+  const data = await service.post(req.body.data)
   res.status(201).json({ data })
 }
 
