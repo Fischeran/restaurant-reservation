@@ -36,7 +36,7 @@ const handleChange = ({ target }) => {
  async function submitHandler(event) {
     event.preventDefault()
     addReservation(formData, controller.signal)
-    history.push("/dashboard")
+    history.push(`/dashboard?date=${formData.reservation_date}`)
 
 
 }

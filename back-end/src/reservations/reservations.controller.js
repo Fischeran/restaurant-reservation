@@ -29,6 +29,7 @@ async function list(req, res) {
 
 //adding properties validater
 
+/*
 const valid_properties = [
   "first_name",
   "last_name",
@@ -53,6 +54,7 @@ function hasValidProperties(req, res, next) {
   }  
   next()
 }
+*/
 
 function hasValidBody(bodyType) {
   return function (req, res, next) {
@@ -109,7 +111,7 @@ async function create(req, res) {
 
 module.exports = {
   list,
-  create: [hasValidProperties,
+  create: [
             hasValidBody("first_name"),
             empty("first_name"),
             hasValidBody("last_name"),
