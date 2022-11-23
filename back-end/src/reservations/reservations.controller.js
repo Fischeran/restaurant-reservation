@@ -76,6 +76,28 @@ function empty(bodyType) {
   }
 }
 
+function validateDateIsPresent(req, res, next) {
+  const { data = {}} = req.body
+  const today = asDateString(new Date())
+
+  if (data["reservation_date"].localeCompare(today) === -1) {
+    next({status: 400, message: "reservation_date must today or in the future"})
+  }
+  next()
+
+
+}
+
+function validateBussinessIsOpen(req, res, next) {
+  const { data = {}} = req.body
+  const day = new Date(data["reservation_date"]).getDay()
+
+  if (day === 1) {
+    next({status: 400, message: "reservation_date must be on an operating bussiness day, bussiness is closed on date of reservation"})
+  }
+  next()
+}
+
 function validateDate(req, res, next) {
   const { data = {}} = req.body
 
@@ -117,6 +139,8 @@ module.exports = {
             hasValidBody("mobile_number"),
             empty("mobile_number"),
             hasValidBody("reservation_date"),
+            validateDateIsPresent,
+            validateBussinessIsOpen,
             empty("reservation_date"),
             hasValidBody("reservation_time"),
             empty("reservation_time"),
