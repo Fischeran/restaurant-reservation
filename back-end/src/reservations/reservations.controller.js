@@ -98,6 +98,25 @@ function validateBussinessIsOpen(req, res, next) {
   next()
 }
 
+function validateOpenTime(req, res, next) {
+  const { data = {}} = req.body
+  const time = data["reservation_time"]
+
+  let open = "10:30"
+  let close = "21:30"
+
+  if (open.localeCompare(time) === 1) {
+    next({status: 400, message: "reservation_time is during time business is closed "})
+  }
+
+  if (close.localeCompare(time) === -1) {
+    next({status: 400, message: "reservation_time is during time business is closed "})
+  }
+
+  next()
+
+}
+
 function validateDate(req, res, next) {
   const { data = {}} = req.body
 
@@ -141,6 +160,7 @@ module.exports = {
             hasValidBody("reservation_date"),
             validateDateIsPresent,
             validateBussinessIsOpen,
+            validateOpenTime,
             empty("reservation_date"),
             hasValidBody("reservation_time"),
             empty("reservation_time"),
