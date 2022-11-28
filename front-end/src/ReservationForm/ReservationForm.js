@@ -15,6 +15,7 @@ let controller = new AbortController()
 let history = useHistory()    
 const [past, setPast] = useState(false)
 const [closed, setClosed] = useState(false)
+const [time, setTime] = useState(false)
 
 const initialFormData = {
     "first_name": "",
@@ -36,6 +37,21 @@ const handleChange = ({ target }) => {
     console.log(target.value)
 }
 
+function compareTime(formTime){
+    let open = "10:30"
+    let close = "21:30"
+
+    if(open.localeCompare(formTime) === 1) {
+        return true
+    }
+
+    if (close.localeCompare(formTime) === -1) {
+        return true 
+    }
+
+}
+
+
  async function submitHandler(event) {
     event.preventDefault()
     const day = new Date(formData["reservation_date"]).getDay()
@@ -43,14 +59,31 @@ const handleChange = ({ target }) => {
             if (formData["reservation_date"].localeCompare(today()) === -1) {
                 setPast(true);
             }
+            if (compareTime(formData["reservation_time"])) {
+                setTime(true)
+            }
+
         setClosed(true);
         return
     }
+
     if (formData["reservation_date"].localeCompare(today()) === -1) {
+
+        if (compareTime(formData["reservation_time"])) {
+            setTime(true)
+        }
+
+
         setPast(true);
         return
     }
 
+
+
+    if (compareTime(formData["reservation_time"])) {
+        setTime(true)
+        return
+    }
 
     addReservation(formData, controller.signal)
     history.push(`/dashboard?date=${formData.reservation_date}`)
@@ -66,6 +99,7 @@ return (
 <div>  
     {closed === true && <h3 className="alert alert-danger">Date must be on operating business day</h3>}
     {past === true && <h3 className="alert alert-danger">Date must not be in the past</h3>}
+    {time === true && <h3 className="alert alert-danger">Time must be during business hours</h3>}
 <form onSubmit={(event) => submitHandler(event)}>
 
     <label for="first_name">First Name:</label>
