@@ -85,3 +85,14 @@ export async function addReservation(params, signal) {
   return await fetchJson(url, {signal, method: 'POST', body: JSON.stringify(put), headers});
 
 }
+
+export async function addTable(params, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const put = {data: {
+     ...params,
+     capacity: parseInt(params.reservation_date)
+    }}
+  
+  return await fetchJson(url, {signal, method: 'POST', body: JSON.stringify(put), headers});
+
+}
