@@ -15,10 +15,11 @@ import useQuery from "../utils/useQuery";
 
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [dashDate, setDashDate] = useState(useQuery().get("date") || today())
+  const [dashDate, setDashDate] = useState(useQuery().get("date") || today());
  
-  console.log(reservations)
+  
   useEffect(loadDashboard, [dashDate]);
 
   function loadDashboard() {
@@ -41,6 +42,22 @@ function Dashboard() {
     display any error messages returned from the API
   */
 
+    /*
+    "first_name": "",
+    "last_name": "",
+    "mobile_number": "",
+    "reservation_date": "",
+    "reservation_time": "",
+    "people": "",
+    */
+
+    /*
+    table_name
+    capacity
+    table_id
+    reservation-id (foreign key)
+    */
+
 
   return (
     <main>
@@ -49,7 +66,24 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+      <div className="row-md">
+      {reservations.map(res => {
+        return (
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">{`${res.first_name} ${res.last_name} party of ${res.people}`}</h5>
+              <p className="card-text">time: {res.reservation_time}</p>
+              <a href={`/reservations/${res.reservation_id}/seat`}><button>seat</button></a>
+            </div>
+
+          </div>
+        )
+      })}
+      </div>
+      <div className="row-md">
+       
+      </div>
+      
     </main>
   );
 }
