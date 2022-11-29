@@ -79,7 +79,7 @@ export async function addReservation(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   const put = {data: {
      ...params,
-     people: parseInt(params.reservation_date)
+     people: parseInt(params.people)
     }}
   
   return await fetchJson(url, {signal, method: 'POST', body: JSON.stringify(put), headers});

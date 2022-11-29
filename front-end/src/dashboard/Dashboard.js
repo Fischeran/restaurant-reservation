@@ -23,7 +23,7 @@ function Dashboard() {
   useEffect(loadDashboard, [dashDate]);
 
   function loadDashboard() {
-    console.log(dashDate)
+    
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date: dashDate }, abortController.signal)
@@ -57,6 +57,7 @@ function Dashboard() {
     table_id
     reservation-id (foreign key)
     */
+   
 
 
   return (
@@ -68,6 +69,7 @@ function Dashboard() {
       <ErrorAlert error={reservationsError} />
       <div className="row-md">
       {reservations.map(res => {
+        
         return (
           <div className="card">
             <div className="card-body">
@@ -81,11 +83,33 @@ function Dashboard() {
       })}
       </div>
       <div className="row-md">
-       
+       {tables.map(table => {
+        return (
+          <div className="card"> 
+            <div className="card-body">
+              <h5 className="card-title">{`${table.table_name} - capacity: ${table.capacity}`}</h5>
+              {() =>{
+                 if (table.reservation_id) { return (<p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p>) }
+                 else { return (<p className="card-text" data-table-id-status={`${table.table_id}`}>Free</p>)}
+                 }}
+
+            </div>  
+          </div>
+        )
+
+       })}
       </div>
       
     </main>
   );
 }
+
+/*
+    table_name
+    capacity
+    table_id
+    reservation-id (foreign key)
+    */
+
 
 export default Dashboard;
