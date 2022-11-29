@@ -132,7 +132,7 @@ function validateTime(req,res, next) {
 }
 
 function validatePeople(req, res, next) {
-  const { data = {}} = req.body
+  const { data = {}} = req.body;
   const check = typeof data["people"];
 
   if(check !== "number") {return next({status: 400, message: "people must be a valid number"})}
@@ -146,6 +146,13 @@ async function create(req, res) {
 
   const data = await service.post(req.body.data)
   res.status(201).json({ data })
+}
+
+async function read(req, res) {
+  const { reservationId } = req.params;
+  const data = await service.read(reservationId)
+
+  res.json({ data })
 }
 
 module.exports = {
@@ -169,5 +176,6 @@ module.exports = {
             validateDate,
             validateTime,
             validatePeople,
-           create]
+           create],
+  read         
 };
