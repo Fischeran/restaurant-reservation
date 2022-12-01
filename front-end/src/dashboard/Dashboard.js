@@ -104,12 +104,7 @@ function Dashboard() {
   );
 }
 
-/*
-    table_name
-    capacity
-    table_id
-    reservation-id (foreign key)
-    */
+
 
 
 export default Dashboard;

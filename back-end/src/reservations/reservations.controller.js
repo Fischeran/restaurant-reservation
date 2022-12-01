@@ -135,7 +135,7 @@ function validatePeople(req, res, next) {
   const { data = {}} = req.body;
   const check = typeof data["people"];
 
-  if(check !== "number") {return next({status: 400, message: "people must be a valid number"})}
+  if(check !== "number") {return next({status: 404, message: "people must be a valid number"})}
  
 
   next()
