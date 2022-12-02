@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { listReservations } from "../utils/api";
+import { listReservations , listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
@@ -18,6 +18,7 @@ function Dashboard() {
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dashDate, setDashDate] = useState(useQuery().get("date") || today());
+  
  
   
   useEffect(loadDashboard, [dashDate]);
@@ -29,6 +30,10 @@ function Dashboard() {
     listReservations({ date: dashDate }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    
+    listTables({}, abortController.signal)  
+        .then(setTables)
+      
     return () => abortController.abort();
   }
 

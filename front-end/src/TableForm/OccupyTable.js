@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory , useParams} from "react-router-dom";
+import { listTables } from "../utils/api";
 
 function OccupyTable() {
     const [openTables, setOpenTables] = useState([]);
@@ -25,6 +26,18 @@ function OccupyTable() {
         })
         
     }
+
+    useEffect(loadDashboard, []);
+
+  function loadDashboard() {
+    
+    const abortController = new AbortController();
+    
+    listTables({}, abortController.signal)  
+        .then(setOpenTables)
+      
+    return () => abortController.abort();
+  }
 
     async function submitHandler(event) {
         event.preventDefault()

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addTable } from "../utils/api";
 
+
 function TableForm() {
     const initialFormData = {
         "table_name": "",
