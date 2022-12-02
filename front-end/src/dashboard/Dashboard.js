@@ -93,11 +93,8 @@ function Dashboard() {
           <div className="card"> 
             <div className="card-body">
               <h5 className="card-title">{`${table.table_name} - capacity: ${table.capacity}`}</h5>
-              {() =>{
-                 if (table.reservation_id) { return (<p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p>) }
-                 else { return (<p className="card-text" data-table-id-status={`${table.table_id}`}>Free</p>)}
-                 }}
-
+                 {table.reservation_id && <p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p> }
+                 {!table.reservation_id && <p className="card-text" data-table-id-status={`${table.table_id}`}>Free</p>}
             </div>  
           </div>
         )

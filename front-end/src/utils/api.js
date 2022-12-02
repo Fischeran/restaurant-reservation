@@ -87,10 +87,10 @@ export async function addReservation(params, signal) {
 }
 
 export async function addTable(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
+  const url = new URL(`${API_BASE_URL}/tables`);
   const put = {data: {
      ...params,
-     capacity: parseInt(params.reservation_date)
+     capacity: parseInt(params.capacity)
     }}
   
   return await fetchJson(url, {signal, method: 'POST', body: JSON.stringify(put), headers});
@@ -102,5 +102,15 @@ export async function listTables(params, signal) {
   
   return await fetchJson(url, { headers, signal }, [])
     
+}
+
+export async function reserve(params, id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${id}/seat`);
+  const put = {data: {
+     reservation_id: parseInt(params.reservation_id)
+    }}
+  
+  return await fetchJson(url, {signal, method: 'PUT', body: JSON.stringify(put), headers});
+
 }
 

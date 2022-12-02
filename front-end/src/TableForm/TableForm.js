@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { addTable } from "../utils/api";
+import { addReservation, addTable } from "../utils/api";
 
 
 function TableForm() {
@@ -22,11 +22,20 @@ function TableForm() {
         console.log(target.value)
     }
 
+    async function submitHandler(event) {
+        let controller = new AbortController()
+        event.preventDefault();
+        if (formData.table_name.length === 1) {return window.alert("table name must be more than 1 character")}
+        await addTable(formData, controller.signal)
+        
+        history.push('/dashboard')
+    }
+
 
     return (
     <div>
 
-        <form>
+        <form onSubmit={(event) => submitHandler(event)}>
         <label for="table_name">table name:</label>
         <input name="table_name" value={formData.table_name} onChange={handleChange} required />
 
