@@ -135,7 +135,7 @@ function validatePeople(req, res, next) {
   const { data = {}} = req.body;
   const check = typeof data["people"];
 
-  if(check !== "number") {return next({status: 404, message: "people must be a valid number"})}
+  if(check !== "number") {return next({status: 400, message: "people must be a valid number"})}
  
 
   next()
@@ -148,9 +148,10 @@ async function create(req, res) {
   res.status(201).json({ data })
 }
 
-async function read(req, res) {
+async function read(req, res, next) {
   const { reservationId } = req.params;
   const data = await service.read(reservationId)
+  if (!data) {return next({status: 404, message: `${reservationId} does not exist`})}
 
   res.json({ data })
 }

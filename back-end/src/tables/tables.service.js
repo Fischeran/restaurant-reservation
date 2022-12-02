@@ -31,6 +31,13 @@ function read(table_id) {
 
 }
 
+function update(updatedTable) {
+    return knex("tables")
+      .select("*")
+      .where({ table_id: updatedTable.table_id })
+      .update(updatedTable, "*");
+  }
+
 
 
 
@@ -38,5 +45,6 @@ module.exports = {
     post,
     list,
     readRes,
-    read
+    read,
+    update
 }

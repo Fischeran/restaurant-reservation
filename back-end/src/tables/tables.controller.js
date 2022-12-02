@@ -90,10 +90,21 @@ async function sufficientCapacity(req, res, next) {
 async function isReserved(req, res, next) {
     const table = res.locals.table;
 
-    if (table.reservation_id) {return next({status: 400, message: "table is reserved"})}
+    if (table.reservation_id) {return next({status: 400, message: "table is occupied"})}
 
     next()
 
+}
+
+async function put(req, res) {
+  const updatedTable = {
+    ...req.body.data,
+    table_id: req.params.table_id
+  }
+
+
+ const data = await service.update(updatedTable)
+ res.status(200).json({ data })
 }
 
 
@@ -108,12 +119,13 @@ module.exports = {
             checkZero,
             tableNameLength,
             validateCapacity,
-            isReserved,
             post],
     list,
     put: [
         hasValidBody("reservation_id"), 
         validReservation,
-        sufficientCapacity
+        sufficientCapacity,
+        isReserved,
+        put
             ]
 }
