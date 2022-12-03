@@ -37,31 +37,10 @@ function Dashboard() {
     return () => abortController.abort();
   }
 
-  
-  /*
-    list all reservations for one date only. (E.g. if the URL is /dashboard?date=2035-12-30 then send a GET to /reservations?date=2035-12-30 
-    to list the reservations for that date). The date is defaulted to today, and the reservations are sorted by time.
-
-    display next, previous, and today buttons that allow the user to see reservations on other dates
-
-    display any error messages returned from the API
-  */
-
-    /*
-    "first_name": "",
-    "last_name": "",
-    "mobile_number": "",
-    "reservation_date": "",
-    "reservation_time": "",
-    "people": "",
-    */
-
-    /*
-    table_name
-    capacity
-    table_id
-    reservation-id (foreign key)
-    */
+  async function finishHandler(event) {
+    event.preventDefault();
+    console.log(event.target.name)
+  }
    
 
 
@@ -93,7 +72,9 @@ function Dashboard() {
           <div className="card"> 
             <div className="card-body">
               <h5 className="card-title">{`${table.table_name} - capacity: ${table.capacity}`}</h5>
-                 {table.reservation_id && <p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p> }
+                 {table.reservation_id && <div><p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p>
+                  <button name={table.table_id} data-table-id-finish={table.table_id} onClick={(event) => finishHandler(event)} type="submit">Finish</button></div>
+                 }
                  {!table.reservation_id && <p className="card-text" data-table-id-status={`${table.table_id}`}>Free</p>}
             </div>  
           </div>

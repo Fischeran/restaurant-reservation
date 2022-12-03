@@ -114,3 +114,12 @@ export async function reserve(params, id, signal) {
 
 }
 
+export async function freeTable(id, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${id}/seat`);
+  const destroy = {data: {
+    table_id: parseInt(id)
+   }}
+
+  return await fetchJson(url, {signal, method: 'DELETE', body: JSON.stringify(destroy), headers});
+
+}
