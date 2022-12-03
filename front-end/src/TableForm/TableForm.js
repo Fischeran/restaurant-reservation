@@ -12,6 +12,7 @@ function TableForm() {
     const history = useHistory()
 
     const [formData, setFormData] = useState(initialFormData)
+    const [oneChar, setOneChar] = useState(false)
 
     const handleChange = ({ target }) => {
     
@@ -25,7 +26,10 @@ function TableForm() {
     async function submitHandler(event) {
         let controller = new AbortController()
         event.preventDefault();
-        if (formData.table_name.length === 1) {return window.alert("table name must be more than 1 character")}
+        if (formData.table_name.length === 1) {
+            setOneChar(true)
+            return
+        }
         await addTable(formData, controller.signal)
         
         history.push('/dashboard')
@@ -34,7 +38,7 @@ function TableForm() {
 
     return (
     <div>
-
+        {oneChar === true && <h3 className="alert alert-danger">Table Name must be longer than one character</h3>}
         <form onSubmit={(event) => submitHandler(event)}>
         <label for="table_name">table name:</label>
         <input name="table_name" value={formData.table_name} onChange={handleChange} required />
