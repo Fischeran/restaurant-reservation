@@ -38,6 +38,15 @@ function update(updatedTable) {
       .update(updatedTable, "reservation_id");
   }
 
+function freeTable(table_id) {
+
+    return knex("tables")
+            .select("*")
+            .where({ table_id })
+            .update({ reservation_id: null}, "reservation_id")
+            
+}  
+
 
 
 
@@ -46,5 +55,6 @@ module.exports = {
     list,
     readRes,
     read,
-    update
+    update,
+    freeTable
 }

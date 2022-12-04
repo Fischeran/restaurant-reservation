@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useHistory } from "react-router";
 import { listReservations , listTables , freeTable} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
@@ -18,6 +18,7 @@ function Dashboard() {
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [dashDate, setDashDate] = useState(useQuery().get("date") || today());
+  const history = useHistory()
   
  
   
@@ -41,7 +42,8 @@ function Dashboard() {
     const abortController = new AbortController();
     event.preventDefault();
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
-      freeTable(event.target.name, abortController.signal)
+      await freeTable(event.target.name, abortController.signal)
+      history.go(0)
     }
     
 

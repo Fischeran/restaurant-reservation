@@ -108,6 +108,24 @@ async function put(req, res) {
 }
 
 
+async function freeTable(req, res, next) {
+  const data = await service.freeTable(req.params.table_id)
+  res.status(200).json({ data })
+}
+
+async function validTable(req, res, next) {
+  const table = await service.read(req.params.table_id);
+  if (!table) { return next({status: 404, message: `${req.params.table_id} not a valid table_id`})}
+  res.locals.table = table
+  next()
+}
+
+async function validFreeUp(req, res, next) {
+  if (!res.locals.table.reservation_id) {return next({status: 400, message: "table is not occupied"})}
+  next()
+}
+
+
 
 
 module.exports = {
@@ -127,5 +145,9 @@ module.exports = {
         sufficientCapacity,
         isReserved,
         put
-            ]
+            ],
+   freeTable: [
+                validTable,
+                validFreeUp,
+                freeTable]        
 }
