@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { listReservations , listTables } from "../utils/api";
+import { listReservations , listTables , freeTable} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
@@ -38,8 +38,14 @@ function Dashboard() {
   }
 
   async function finishHandler(event) {
+    const abortController = new AbortController();
     event.preventDefault();
-    console.log(event.target.name)
+    if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
+      freeTable(event.target.name, abortController.signal)
+    }
+    
+
+    
   }
    
 
