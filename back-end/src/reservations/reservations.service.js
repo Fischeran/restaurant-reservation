@@ -4,6 +4,7 @@ function list(date) {
     return knex("reservations")
             .select("*")
             .where({reservation_date: date})
+            .whereNot({status: "finished"})
             .then(response => {
              return  response.sort((a, b) => { return a.reservation_time.localeCompare(b.reservation_time)})
             })

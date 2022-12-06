@@ -1,5 +1,6 @@
 const service = require("./tables.service")
 
+
 async function post(req, res) {
     const data = await service.post(req.body.data)
     res.status(201).json({ data })
@@ -70,12 +71,12 @@ async function validReservation(req, res, next) {
     if (!reservation) { return next({ status: 404, message: `reservation_id ${check} does not exist`})}
 
     
-    res.locals.people = reservation.people
+    res.locals.reservation = reservation
     next()
 }
 
 async function sufficientCapacity(req, res, next) {
-    const people = res.locals.people;
+    const people = res.locals.reservation.people;
     const table = await service.read(req.params.table_id);
     const capacity = table.capacity;
 
@@ -97,18 +98,28 @@ async function isReserved(req, res, next) {
 }
 
 async function put(req, res) {
+  const reservation_id = res.locals.reservation.reservation_id
+  
   const updatedTable = {
     ...req.body.data,
     table_id: req.params.table_id
   }
+
+ await service.seatTable(reservation_id)
 
 
  const data = await service.update(updatedTable)
  res.status(200).json({ data })
 }
 
+async function alreadySeated(req, res, next) {
+  if (res.locals.reservation.status === "seated") {return next({status: 400, message: "table is already seated"})}
+  next()
+}
+
 
 async function freeTable(req, res, next) {
+  await service.finishTable(res.locals.table.reservation_id)
   const data = await service.freeTable(req.params.table_id)
   res.status(200).json({ data })
 }
@@ -144,6 +155,7 @@ module.exports = {
         validReservation,
         sufficientCapacity,
         isReserved,
+        alreadySeated,
         put
             ],
    freeTable: [

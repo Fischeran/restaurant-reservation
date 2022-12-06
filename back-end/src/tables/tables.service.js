@@ -47,6 +47,20 @@ function freeTable(table_id) {
             
 }  
 
+function seatTable(reservation_id) {
+    return knex("reservations")
+            .select("*")
+            .where({ reservation_id })
+            .update({ status: "seated"}, "status")
+}
+
+function finishTable(reservation_id) {
+    return knex("reservations")
+            .select("*")
+            .where({ reservation_id })
+            .update({ status: "finished"}, "status")
+}
+
 
 
 
@@ -56,5 +70,7 @@ module.exports = {
     readRes,
     read,
     update,
-    freeTable
+    freeTable,
+    seatTable,
+    finishTable
 }
