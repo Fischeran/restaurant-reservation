@@ -207,8 +207,25 @@ async function statusUpdate(req, res){
 
 }
 
+async function mobileSearch(req, res, next) {
+  const mobile_number = req.query.mobile_number;
+
+  if (mobile_number) {
+    const data = await service.search(mobile_number);
+
+    data ? res.json({data}) : res.json({ data: [] })
+
+  } else {
+    next()
+  }
+
+
+}
+
+
+
 module.exports = {
-  list,
+  list: [mobileSearch, list],
   create: [
             hasValidBody("first_name"),
             empty("first_name"),
