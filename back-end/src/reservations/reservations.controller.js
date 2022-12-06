@@ -1,5 +1,6 @@
 const service = require("./reservations.service")
-const moment = require("moment")
+const moment = require("moment");
+
 
 
 
@@ -156,6 +157,56 @@ async function read(req, res, next) {
   res.json({ data })
 }
 
+async function validStatus(req, res, next) {
+  const { data = {}} = req.body;
+  let count = 0
+
+  if (data.status !== "booked") {
+    count += 1
+  }
+
+  if (data.status !== "seated") {
+    count += 1
+  }
+
+  if (data.status !== "finished") {
+    count += 1
+  }
+
+
+
+ if (count === 3) {return next({status: 400, message: `${data.status} is an unknown status`}) }
+
+  next()
+}
+
+async function validNewStatus(req, res, next) {
+  const { data = {}} = req.body;
+  if (data.status === "seated" || data.status === "finished") {
+    next({status: 400, message: "status must not be seated or finished"})
+  }
+  next()
+}
+
+async function isFinished(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id)
+  if (!reservation) {return next({status: 404, message: `${reservation_id} does not exist`})}
+  if (reservation.status === "finished") {return next({status: 400, message: "finished tables cannot be updated"})}
+  next()
+}
+
+async function statusUpdate(req, res){
+  const { data = {}} = req.body;
+  const { reservation_id } = req.params;
+
+  const response = await service.updateStatus(reservation_id, data.status)
+
+  res.status(200).json({data: response})
+
+
+}
+
 module.exports = {
   list,
   create: [
@@ -177,6 +228,8 @@ module.exports = {
             validateDate,
             validateTime,
             validatePeople,
+            validNewStatus,
            create],
-  read         
+  read,
+  statusUpdate: [validStatus, isFinished, statusUpdate]        
 };
