@@ -173,9 +173,12 @@ async function validStatus(req, res, next) {
     count += 1
   }
 
+  if (data.status !== "cancelled") {
+    count += 1
+  }
 
 
- if (count === 3) {return next({status: 400, message: `${data.status} is an unknown status`}) }
+ if (count === 4) {return next({status: 400, message: `${data.status} is an unknown status`}) }
 
   next()
 }
@@ -222,6 +225,27 @@ async function mobileSearch(req, res, next) {
 
 }
 
+async function put(req, res) {
+  const reservation_id = res.locals.reservation.reservation_id
+
+  const updatedTable = {
+    ...req.body.data,
+    reservation_id: reservation_id
+  }
+
+  const data = await service.update(updatedTable)
+  res.status(200).json({ data })
+
+}
+
+async function reservationExists(req, res, next) {
+  const { reservationId } = req.params;
+  const data = await service.read(reservationId)
+  if (!data) {return next({status: 404, message: `${reservationId} does not exist`})}
+  res.locals.reservation = data
+  next()
+}
+
 
 
 module.exports = {
@@ -248,5 +272,28 @@ module.exports = {
             validNewStatus,
            create],
   read,
-  statusUpdate: [validStatus, isFinished, statusUpdate]        
+  statusUpdate: [validStatus, isFinished, statusUpdate],
+  put : [   
+            reservationExists,
+            hasValidBody("first_name"),
+            empty("first_name"),
+            hasValidBody("last_name"),
+            empty("last_name"),
+            hasValidBody("mobile_number"),
+            empty("mobile_number"),
+            hasValidBody("reservation_date"),
+            validateDateIsPresent,
+            validateBussinessIsOpen,
+            validateOpenTime,
+            empty("reservation_date"),
+            hasValidBody("reservation_time"),
+            empty("reservation_time"),
+            hasValidBody("people"),
+            empty("people"),
+            validateDate,
+            validateTime,
+            validatePeople,
+            validNewStatus,
+            put
+  ]       
 };
