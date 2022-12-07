@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { addReservation } from "../utils/api";
+import { useHistory , useParams } from "react-router-dom";
+import { addReservation , updateReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 
 function ReservationForm() {
@@ -11,6 +11,7 @@ Need to change onClick in cancel to push to a specific page, maybe dashboard?
 
 */    
 let controller = new AbortController()
+const reservation_id = useParams()
 
 let history = useHistory()    
 const [past, setPast] = useState(false)
@@ -85,9 +86,14 @@ function compareTime(formTime){
         return
     }
 
+    if (reservation_id) {
+    updateReservation(reservation_id, formData, controller.signal)
+    history.push(`/dashboard?date=${formData.reservation_date}`)
+    } else {
+
     addReservation(formData, controller.signal)
     history.push(`/dashboard?date=${formData.reservation_date}`)
-
+    }
 
 }
 
