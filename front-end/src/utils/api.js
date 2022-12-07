@@ -123,3 +123,10 @@ export async function freeTable(id, signal){
   return await fetchJson(url, {signal, method: 'DELETE', body: JSON.stringify(destroy), headers});
 
 }
+
+export async function cancelReservation(id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${id}/status`)
+  const cancel = {data: { status: "cancelled" }}
+
+  return await fetchJson(url, {signal, method: 'PUT', body: JSON.stringify(cancel), headers})
+}
