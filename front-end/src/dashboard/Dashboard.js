@@ -4,6 +4,7 @@ import { listReservations , listTables , freeTable} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
+import ReservationList from "../ReservationList/ReservationList";
 
 /**
  * Defines the dashboard page.
@@ -59,22 +60,7 @@ function Dashboard() {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div className="row-md">
-      {reservations.map(res => {
-        
-        return (
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">{`${res.first_name} ${res.last_name} party of ${res.people}`}</h5>
-              <p className="card-text">time: {res.reservation_time}</p>
-              <p className="car-test" data-reservation-id-status={res.reservation_id}>{res.status}</p>
-              {res.status === "booked" &&  <a href={`/reservations/${res.reservation_id}/seat`}><button>seat</button></a>}
-            </div>
-
-          </div>
-        )
-      })}
-      </div>
+      <ReservationList reservations={reservations} />
       <div className="row-md">
        {tables.map(table => {
         return (
