@@ -133,11 +133,29 @@ export async function cancelReservation(id, signal) {
 
 export async function updatedReservation(id, params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${id}`)
+  const format = params.reservation_time.split(":")
+  const splice = format.splice(2,1)
+  const time = format.join(":")
+  
+
   const updated = { data: {
-    ...params,
+    first_name: params.first_name,
+    last_name: params.last_name,
+    mobile_number: params.mobile_number,
+    reservation_date: params.reservation_date,
+    reservation_time: time,
     reservation_id: parseInt(id),
     people: parseInt(params.people)
   }}
 
   return await fetchJson(url, {signal, method: 'PUT', body: JSON.stringify(updated), headers})
+}
+
+export async function readReservation(id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${id}`)
+
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime)
+
 }

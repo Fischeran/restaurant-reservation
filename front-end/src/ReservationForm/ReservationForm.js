@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory , useParams } from "react-router-dom";
-import { addReservation , updatedReservation } from "../utils/api";
+import { addReservation , updatedReservation , readReservation} from "../utils/api";
 import { today } from "../utils/date-time";
 
 
@@ -29,6 +29,25 @@ const initialFormData = {
 }
 
 const [formData, setFormData] = useState(initialFormData)
+
+
+
+useEffect(() => {
+ async function grabRes(id)  { 
+    try {
+        const current = await readReservation(id, controller.signal)
+            setFormData({...current})
+    } catch(error) {console.log(error)};
+};
+
+if (reservation_id){
+grabRes(reservation_id)
+}
+
+return () => controller.abort()
+
+}, [])
+
 
 const handleChange = ({ target }) => {
     
@@ -89,8 +108,9 @@ function compareTime(formTime){
     }
  
     if (reservation_id) {
+        console.log(formData.reservation_time)
          await updatedReservation(reservation_id, formData, controller.signal)
-         history.go(-1)
+         history.push(`/dashboard?date=${formData.reservation_date}`)
     } else {
 
     await addReservation(formData, controller.signal)
