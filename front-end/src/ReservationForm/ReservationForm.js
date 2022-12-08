@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { addReservation } from "../utils/api";
+import { useHistory , useParams } from "react-router-dom";
+import { addReservation , updatedReservation } from "../utils/api";
 import { today } from "../utils/date-time";
+
 
 function ReservationForm() {
 
@@ -11,6 +12,7 @@ Need to change onClick in cancel to push to a specific page, maybe dashboard?
 
 */    
 let controller = new AbortController()
+let { reservation_id } = useParams()
 
 let history = useHistory()    
 const [past, setPast] = useState(false)
@@ -54,6 +56,7 @@ function compareTime(formTime){
 
  async function submitHandler(event) {
     event.preventDefault()
+    console.log(reservation_id)
     const day = new Date(formData["reservation_date"]).getDay()
     if (day === 1) {
             if (formData["reservation_date"].localeCompare(today()) === -1) {
@@ -84,10 +87,15 @@ function compareTime(formTime){
         setTime(true)
         return
     }
+ 
+    if (reservation_id) {
+         await updatedReservation(reservation_id, formData, controller.signal)
+         history.go(-1)
+    } else {
 
-    addReservation(formData, controller.signal)
+    await addReservation(formData, controller.signal)
     history.push(`/dashboard?date=${formData.reservation_date}`)
-
+}
 
 }
 
@@ -120,7 +128,7 @@ return (
     <label for="people">People:</label>
     <input name="people" value={formData.people} onChange={handleChange} required />
 
-    <button type="submit">SUBMIT</button>
+    <button type="submit">submit</button>
     <button type="cancel" onClick={() => history.push("/dashboard")}>CANCEL</button>
     
 </form>

@@ -130,3 +130,14 @@ export async function cancelReservation(id, signal) {
 
   return await fetchJson(url, {signal, method: 'PUT', body: JSON.stringify(cancel), headers})
 }
+
+export async function updatedReservation(id, params, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${id}`)
+  const updated = { data: {
+    ...params,
+    reservation_id: parseInt(id),
+    people: parseInt(params.people)
+  }}
+
+  return await fetchJson(url, {signal, method: 'PUT', body: JSON.stringify(updated), headers})
+}
