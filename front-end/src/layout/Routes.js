@@ -34,7 +34,7 @@ function Routes() {
         <OccupyTable />
       </Route>
       <Route path="/reservations/:reservation_id/edit">
-        <ReservationForm />
+        <ReservationEdit />
       </Route>
       <Route path="/reservations/new">
         <ReservationForm />
