@@ -1,4 +1,5 @@
 const service = require("./tables.service")
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 
 
 async function post(req, res) {
@@ -88,7 +89,7 @@ async function sufficientCapacity(req, res, next) {
 
 }
 
-async function isReserved(req, res, next) {
+function isReserved(req, res, next) {
     const table = res.locals.table;
 
     if (table.reservation_id) {return next({status: 400, message: "table is occupied"})}
@@ -112,7 +113,7 @@ async function put(req, res) {
  res.status(200).json({ data })
 }
 
-async function alreadySeated(req, res, next) {
+function alreadySeated(req, res, next) {
   if (res.locals.reservation.status === "seated") {return next({status: 400, message: "table is already seated"})}
   next()
 }
@@ -131,7 +132,7 @@ async function validTable(req, res, next) {
   next()
 }
 
-async function validFreeUp(req, res, next) {
+function validFreeUp(req, res, next) {
   if (!res.locals.table.reservation_id) {return next({status: 400, message: "table is not occupied"})}
   next()
 }
@@ -147,19 +148,19 @@ module.exports = {
             empty("capacity"),
             checkZero,
             tableNameLength,
-            validateCapacity,
-            post],
+            asyncErrorBoundary(validateCapacity),
+            asyncErrorBoundary(post)],
     list,
     put: [
         hasValidBody("reservation_id"), 
-        validReservation,
+        asyncErrorBoundary(validReservation),
         sufficientCapacity,
         isReserved,
         alreadySeated,
-        put
+        asyncErrorBoundary(put)
             ],
    freeTable: [
-                validTable,
+                asyncErrorBoundary(validTable),
                 validFreeUp,
-                freeTable]        
+                asyncErrorBoundary(freeTable)]        
 }

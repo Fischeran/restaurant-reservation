@@ -1,5 +1,6 @@
 const service = require("./reservations.service")
 const moment = require("moment");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 
 
@@ -157,7 +158,7 @@ async function read(req, res, next) {
   res.json({ data })
 }
 
-async function validStatus(req, res, next) {
+function validStatus(req, res, next) {
   const { data = {}} = req.body;
   let count = 0
 
@@ -183,7 +184,7 @@ async function validStatus(req, res, next) {
   next()
 }
 
-async function validNewStatus(req, res, next) {
+function validNewStatus(req, res, next) {
   const { data = {}} = req.body;
   if (data.status === "seated" || data.status === "finished") {
     next({status: 400, message: "status must not be seated or finished"})
@@ -249,7 +250,7 @@ async function reservationExists(req, res, next) {
 
 
 module.exports = {
-  list: [mobileSearch, list],
+  list: [mobileSearch, asyncErrorBoundary(list)],
   create: [
             hasValidBody("first_name"),
             empty("first_name"),
@@ -270,9 +271,9 @@ module.exports = {
             validateTime,
             validatePeople,
             validNewStatus,
-           create],
+           asyncErrorBoundary(create)],
   read,
-  statusUpdate: [validStatus, isFinished, statusUpdate],
+  statusUpdate: [validStatus, asyncErrorBoundary(isFinished), asyncErrorBoundary(statusUpdate)],
   put : [   
             reservationExists,
             hasValidBody("first_name"),
@@ -294,6 +295,6 @@ module.exports = {
             validateTime,
             validatePeople,
             validNewStatus,
-            put
+            asyncErrorBoundary(put)
   ]       
 };
