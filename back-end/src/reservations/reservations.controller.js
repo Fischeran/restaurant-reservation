@@ -93,6 +93,11 @@ function validateDateIsPresent(req, res, next) {
 function validateBussinessIsOpen(req, res, next) {
   const { data = {}} = req.body
   const day = new Date(data["reservation_date"]).getDay()
+  const dayWithout = new Date(data["reservation_date"])
+
+  console.log(`day: ${day}`)
+  console.log(`reservation Date: ${data["reservation_date"]}`)
+  console.log(`day without: ${dayWithout}`)
 
   if (day === 1) {
     next({status: 400, message: "reservation_date must be on an operating bussiness day, bussiness is closed on date of reservation"})
