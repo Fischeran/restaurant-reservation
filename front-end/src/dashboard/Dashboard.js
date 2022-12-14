@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { listReservations , listTables , freeTable} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { today } from "../utils/date-time";
+import { today , asDateString } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import ReservationList from "../ReservationList/ReservationList";
 
@@ -35,6 +35,7 @@ function Dashboard() {
     
     listTables({}, abortController.signal)  
         .then(setTables)
+        .catch(setReservationsError);
       
     return () => abortController.abort();
   }
@@ -50,14 +51,34 @@ function Dashboard() {
 
     
   }
+
+
    
+  function changeDayHandler(event) {
+    event.preventDefault()
+    
+    const startDate = new Date(`${dashDate} 00:00`)
+    const grab = startDate.getDate()
+
+    if (event.target.name === "today") {
+      setDashDate(today());
+      return
+    }
+    
+    event.target.name === "previous" ? startDate.setDate(grab - 1) : startDate.setDate(grab + 1)
+
+    setDashDate(asDateString(startDate))
+  }
 
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date: {dashDate}</h4>
+        <button name="previous" onClick={(event) => changeDayHandler(event)}>previous</button>
+        <button name="today" onClick={(event) => changeDayHandler(event)}>today</button>
+        <button name="next" onClick={(event) => changeDayHandler(event)}>next</button>
       </div>
       <ErrorAlert error={reservationsError} />
       <ReservationList reservations={reservations} />

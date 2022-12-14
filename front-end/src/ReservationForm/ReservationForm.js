@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory , useParams } from "react-router-dom";
 import { addReservation , updatedReservation , readReservation} from "../utils/api";
 import { today } from "../utils/date-time";
+import ErrorAlert from "../layout/ErrorAlert";
 
 
 function ReservationForm() {
@@ -18,6 +19,7 @@ let history = useHistory()
 const [past, setPast] = useState(false)
 const [closed, setClosed] = useState(false)
 const [time, setTime] = useState(false)
+const [readError, setReadError] = useState(null);
 
 const initialFormData = {
     "first_name": "",
@@ -37,7 +39,7 @@ useEffect(() => {
     try {
         const current = await readReservation(id, controller.signal)
             setFormData({...current})
-    } catch(error) {console.log(error)};
+    } catch(error) {setReadError(error)};
 };
 
 if (reservation_id){
@@ -128,6 +130,7 @@ return (
     {closed === true && <h3 className="alert alert-danger">Date must be on operating business day</h3>}
     {past === true && <h3 className="alert alert-danger">Date must not be in the past</h3>}
     {time === true && <h3 className="alert alert-danger">Time must be during business hours</h3>}
+    <ErrorAlert error={readError} />
 <form onSubmit={(event) => submitHandler(event)}>
 
     <label for="first_name">First Name:</label>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { addReservation, addTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 
 function TableForm() {
@@ -13,6 +14,7 @@ function TableForm() {
 
     const [formData, setFormData] = useState(initialFormData)
     const [oneChar, setOneChar] = useState(false)
+    const [tableError, setTableError] = useState(null)
 
     const handleChange = ({ target }) => {
     
@@ -30,7 +32,10 @@ function TableForm() {
             setOneChar(true)
             return
         }
-        await addTable(formData, controller.signal)
+        try {
+        await addTable(formData, controller.signal)} catch (error) {
+            setTableError(error)
+        }
         
         history.push('/dashboard')
     }
@@ -39,6 +44,7 @@ function TableForm() {
     return (
     <div>
         {oneChar === true && <h3 className="alert alert-danger">Table Name must be longer than one character</h3>}
+        <ErrorAlert error={tableError} />
         <form onSubmit={(event) => submitHandler(event)}>
         <label for="table_name">table name:</label>
         <input name="table_name" value={formData.table_name} onChange={handleChange} required />
