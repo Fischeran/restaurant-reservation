@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory , useParams} from "react-router-dom";
 import { listTables , reserve } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 function OccupyTable() {
     const [openTables, setOpenTables] = useState([]);
@@ -9,6 +10,7 @@ function OccupyTable() {
     const initialFormData = { table_id: "", reservation_id: reservation_id};
     const [formData, setFormData] = useState({...initialFormData});
     const abortController = new AbortController();
+    const [tableError, setTableError] = useState(null);
 
     //need to make an api call that only gives us unnoccupied table
 
@@ -45,8 +47,13 @@ function OccupyTable() {
         const params = {
             reservation_id: formData.reservation_id
         }
+        try {
         await reserve(params, formData.table_id, abortController.signal)
         history.push('/dashboard')
+        } catch (err) {
+            setTableError(err)
+        }
+        
     }
     
 
@@ -55,7 +62,7 @@ function OccupyTable() {
 
             <form onSubmit={(event) => submitHandler(event)}>
                 <label for="table_id">Open Tables:</label>
-
+                <ErrorAlert error={tableError} />
                 <select name="table_id" id="table_id" onChange={handleChange} value={formData.table_id}>
                     <option value="">--No Table Selected--</option>
                     {openTables.map(table => {
