@@ -28,7 +28,7 @@ const history = useHistory();
                       <h5 className="card-title">{`${res.first_name} ${res.last_name} party of ${res.people}`}</h5>
                       <p className="card-text">time: {res.reservation_time}</p>
                       <p className="car-test" data-reservation-id-status={res.reservation_id}>{res.status}</p>
-                      {res.status === "booked" &&  <a href={`/reservations/${res.reservation_id}/seat`}><button>seat</button></a>}
+                      {res.status === "booked" &&  <Link to={`/reservations/${res.reservation_id}/seat`}><button>seat</button></Link>}
                       {res.status !== "cancelled" && <button name={res.reservation_id} data-reservation-id-cancel={res.reservation_id} onClick={(event) => cancel(event)}>Cancel</button>}
                       <Link to={`/reservations/${res.reservation_id}/edit`}><button>Edit</button></Link>
                     </div>
