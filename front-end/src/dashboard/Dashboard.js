@@ -52,7 +52,7 @@ function Dashboard() {
     
   }
 
-
+  let uniqueKey = 30000;
    
   function changeDayHandler(event) {
     event.preventDefault()
@@ -83,9 +83,9 @@ function Dashboard() {
       <ErrorAlert error={reservationsError} />
       <ReservationList reservations={reservations} />
       <div className="row-md">
-       {tables.map(table => {
+       {tables.map((table, index) => {
         return (
-          <div className="card"> 
+          <div className="card" key={uniqueKey + index}> 
             <div className="card-body">
               <h5 className="card-title">{`${table.table_name} - capacity: ${table.capacity}`}</h5>
                  {table.reservation_id && <div><p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p>

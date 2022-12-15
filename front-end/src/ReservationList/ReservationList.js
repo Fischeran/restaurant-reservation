@@ -17,13 +17,15 @@ const history = useHistory();
         history.go(0)
       } 
   }
+
+      let uniqueKey = 2000;
      
         return (
             <div className="row-md">
-            {reservations.map(res => {
+            {reservations.map((res , index)=> {
         
                 return (
-                  <div className="card">
+                  <div className="card" key={uniqueKey + index}>
                     <div className="card-body">
                       <h5 className="card-title">{`${res.first_name} ${res.last_name} party of ${res.people}`}</h5>
                       <p className="card-text">time: {res.reservation_time}</p>
