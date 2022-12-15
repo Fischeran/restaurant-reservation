@@ -111,12 +111,15 @@ function compareTime(formTime){
  
     if (reservation_id) {
         console.log(formData.reservation_time)
+        try {
          await updatedReservation(reservation_id, formData, controller.signal)
          history.push(`/dashboard?date=${formData.reservation_date}`)
+         } catch (err) {setReadError(err)}
     } else {
-
+        try {
     await addReservation(formData, controller.signal)
     history.push(`/dashboard?date=${formData.reservation_date}`)
+    } catch (err) {setReadError(err)}
 }
 
 }

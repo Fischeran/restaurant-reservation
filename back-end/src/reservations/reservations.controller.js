@@ -148,6 +148,15 @@ function validatePeople(req, res, next) {
   next()
 }
 
+function mobileIsNumber(req, res, next) {
+  const { data = {}} = req.body;
+  const check = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(data["mobile_number"])
+
+  if (!check) {return next({status:404, message: "Mobile Number must be a valid 10 digit phone number"})}
+
+  next()
+}
+
 async function create(req, res) {
  
 
@@ -267,6 +276,7 @@ module.exports = {
             validateDateIsPresent,
             validateBussinessIsOpen,
             validateOpenTime,
+            mobileIsNumber,
             empty("reservation_date"),
             hasValidBody("reservation_time"),
             empty("reservation_time"),
@@ -291,6 +301,7 @@ module.exports = {
             validateDateIsPresent,
             validateBussinessIsOpen,
             validateOpenTime,
+            mobileIsNumber,
             empty("reservation_date"),
             hasValidBody("reservation_time"),
             empty("reservation_time"),
