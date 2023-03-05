@@ -134,28 +134,43 @@ return (
     {past === true && <h3 className="alert alert-danger">Date must not be in the past</h3>}
     {time === true && <h3 className="alert alert-danger">Time must be during business hours</h3>}
     <ErrorAlert error={readError} />
-<form onSubmit={(event) => submitHandler(event)}>
+<form className="container" onSubmit={(event) => submitHandler(event)}>
 
+    <div className="row mt-5  p-2 ml-2">
     <label for="first_name">First Name:</label>
-    <input name="first_name" value={formData.first_name} onChange={handleChange} required />
+    <input className="ml-2" name="first_name" value={formData.first_name} onChange={handleChange} required />
+    </div>
 
+    <div className="row p-2 ml-2">
     <label for="last_name">Last Name:</label>
-    <input name="last_name" value={formData.last_name} onChange={handleChange} required />
+    <input className="ml-2" name="last_name" value={formData.last_name} onChange={handleChange} required />
+    </div>
 
+    <div className="row p-2 ml-2">
     <label for="mobile_number">Mobile Number:</label>
-    <input name="mobile_number" value={formData.mobile_number} onChange={handleChange} required />
+    <input className="ml-2" name="mobile_number" value={formData.mobile_number} onChange={handleChange} required />
+    </div>
 
+    <div className="row p-2 ml-2">
     <label for="reservation_date">Reservation Date:</label>
-    <input name="reservation_date" value={formData.reservation_date} onChange={handleChange} required type="date" />
+    <input className="ml-2" name="reservation_date" value={formData.reservation_date} onChange={handleChange} required type="date" />
+    </div>
 
+
+    <div className="row p-2 ml-2">
     <label for="reservation_time">Reservation Time:</label>
-    <input name="reservation_time" value={formData.reservation_time} onChange={handleChange} required type="time" />
+    <input className="ml-2" name="reservation_time" value={formData.reservation_time} onChange={handleChange} required type="time" />
+    </div>
 
+    <div className="row p-2 ml-2">
     <label for="people">People:</label>
-    <input name="people" value={formData.people} onChange={handleChange} required />
+    <input className="ml-2" name="people" value={formData.people} onChange={handleChange} required />
+    </div>
 
-    <button type="submit">submit</button>
-    <button type="cancel" onClick={() => history.push("/dashboard")}>CANCEL</button>
+    <div className="row p-2 ml-2">
+    <button className="btn btn-primary" type="submit">submit</button>
+    <button className="ml-2 btn btn-danger" type="cancel" onClick={() => history.push("/dashboard")}>CANCEL</button>
+    </div>
     
 </form>
 </div>  

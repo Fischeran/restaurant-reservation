@@ -42,18 +42,25 @@ function TableForm() {
 
 
     return (
-    <div>
+    <div className="ml-5">
         {oneChar === true && <h3 className="alert alert-danger">Table Name must be longer than one character</h3>}
         <ErrorAlert error={tableError} />
-        <form onSubmit={(event) => submitHandler(event)}>
+        <form className="container" onSubmit={(event) => submitHandler(event)}>
+
+        <div className="row mt-5 mb-2">    
         <label for="table_name">table name:</label>
-        <input name="table_name" value={formData.table_name} onChange={handleChange} required />
+        <input className="ml-3" name="table_name" value={formData.table_name} onChange={handleChange} required />
+        </div>
 
+        <div className="row mb-2 ml-2">
         <label for="capacity">capacity:</label>
-        <input name="capacity" value={formData.capacity} onChange={handleChange} required />
+        <input className="ml-3" name="capacity" value={formData.capacity} onChange={handleChange} required />
+        </div>
 
-        <button type="submit">SUBMIT</button>
-        <button type="cancel" onClick={() => history.goBack()}>CANCEL</button>
+        <div className="row p-3">
+        <button className="btn btn-primary" type="submit">SUBMIT</button>
+        <button className="ml-3 btn btn-danger" type="cancel" onClick={() => history.goBack()}>CANCEL</button>
+        </div>
 
         </form>
     </div>

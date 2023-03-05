@@ -74,22 +74,23 @@ function Dashboard() {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
+      <div className="d-flex mb-3">
         <h4 className="mb-0">Reservations for date: {dashDate}</h4>
-        <button name="previous" onClick={(event) => changeDayHandler(event)}>previous</button>
-        <button name="today" onClick={(event) => changeDayHandler(event)}>today</button>
-        <button name="next" onClick={(event) => changeDayHandler(event)}>next</button>
+        <button className="ml-3 btn btn-dark" name="previous" onClick={(event) => changeDayHandler(event)}>previous</button>
+        <button className="ml-3 btn btn-dark" name="today" onClick={(event) => changeDayHandler(event)}>today</button>
+        <button className="ml-3 btn btn-dark" name="next" onClick={(event) => changeDayHandler(event)}>next</button>
       </div>
       <ErrorAlert error={reservationsError} />
+      <div className="container">
       <ReservationList reservations={reservations} />
       <div className="row-md">
        {tables.map((table, index) => {
         return (
-          <div className="card" key={uniqueKey + index}> 
+          <div className="card m-2" key={uniqueKey + index}> 
             <div className="card-body">
               <h5 className="card-title">{`${table.table_name} - capacity: ${table.capacity}`}</h5>
                  {table.reservation_id && <div><p className="card-text" data-table-id-status={`${table.table_id}`}>Occupied</p>
-                  <button name={table.table_id} data-table-id-finish={table.table_id} onClick={(event) => finishHandler(event)} type="submit">Finish</button></div>
+                  <button className="ml-3 btn btn-light" name={table.table_id} data-table-id-finish={table.table_id} onClick={(event) => finishHandler(event)} type="submit">Finish</button></div>
                  }
                  {!table.reservation_id && <p className="card-text" data-table-id-status={`${table.table_id}`}>Free</p>}
             </div>  
@@ -98,7 +99,7 @@ function Dashboard() {
 
        })}
       </div>
-      
+      </div>
     </main>
   );
 }
